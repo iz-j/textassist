@@ -1,0 +1,15 @@
+{
+  "name": "textassist",
+  "version": "0.0.1",
+  "description": "JavaScript library to assist text input.",
+  "main": "gulpfile.js",
+  "dependencies": {
+    "gulp": "^3.8.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "iz-j",
+  "license": "MIT"
+}
