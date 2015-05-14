@@ -1,0 +1,38 @@
+ol li {
+  margin-left: 20px;
+}
+
+.demo textarea {
+  resize: none;
+}
+
+.dropdown-menu {
+  min-width: 150px;
+  max-height: 150px;
+  background: #fff;
+  border: solid 1px gray;
+  border-radius: 4px;
+  box-shadow: 0 6px 12px silver;
+}
+
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  white-space: nowrap;
+  color: #333;
+}
+
+.dropdown-menu  .active > a {
+  color: #fff;
+  text-decoration: none;
+  background-color: #337ab7;
+  outline: 0;
+}
+
+.dropdown-menu > li > img, .dropdown-menu > li > span {
+  vertical-align: middle;
+}
+
+.dropdown-item:HOVER {
+  background: #f5f5f5;
+}
