@@ -39,3 +39,10 @@ var ta2 = new TextAssist(document.getElementById('sample2'), {
   loadingHTML: '<span class="label label-info">Now loading...</span>',
   noneHTML: '<div class="alert alert-warning">There are no items.</div>'
 });
+
+$('#sample3').textassist({
+  find: function(term, callback) {
+    console.log('term = ' + term);
+    callback(filterData(term));
+  }
+});

@@ -10,6 +10,8 @@
  * @param options
  */
 var TextAssist = function(textarea, options) {
+  "use strict";
+  
   // Options;
   var _op = {
     find: function(term, callback) { throw '"find" function is required!'; },
@@ -431,3 +433,41 @@ var TextAssist = function(textarea, options) {
     'destroy': destroy
   };
 };
+
+if (window.jQuery) {
+  (function($) {
+    var init = function(options) {
+      return this.each(function() {
+        var $this = $(this);
+        var data = $this.data('textassist');
+        if (!data) {
+          $this.data('textassist', new TextAssist(this, options));
+        }
+      });
+    };
+    
+    var methods = {
+      destroy: function() {
+        return this.each(function(){
+          var $this = $(this);
+          var data = $this.data('textassist');
+          if (data) {
+            data.destroy();
+            $this.removeData('textassist');
+          }
+       });
+      }
+    };
+    
+    $.fn.textassist = function(method){
+      if (methods[method]) {
+        return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+      } else if (typeof method === 'object' || ! method) {
+        return init.apply(this, arguments);
+      } else {
+        $.error('Method ' +  method + ' does not exist on jQuery.textassist');
+      }
+      return(this);
+    };
+  })(jQuery);
+}
