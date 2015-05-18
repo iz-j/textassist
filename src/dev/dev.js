@@ -44,5 +44,8 @@ $('#sample3').textassist({
   find: function(term, callback) {
     console.log('term = ' + term);
     callback(filterData(term));
+  },
+  onSelected: function(value) {
+    console.log('selected = ' + value);
   }
 });

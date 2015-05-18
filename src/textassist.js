@@ -22,7 +22,8 @@ var TextAssist = function(textarea, options) {
     item: function(value, term) { return value; },
     loadingHTML: '<a href="javasript:void(0)">Loading...</a>',
     noneHTML: '<a href="javasript:void(0)">No items...</a>',
-    delayMills: 200
+    delayMills: 200,
+    onSelected: function(value) {}
   };
   
   Object.keys(_op).forEach(function(name) {
@@ -96,6 +97,7 @@ var TextAssist = function(textarea, options) {
   function _initDom() {
     // Root.
     _elmRoot = document.createElement('div');
+    _elmRoot.className = 'textassist';
     // Suggest area.
     _elmUl = document.createElement('ul');
     _elmUl.tabIndex = -1;
@@ -323,6 +325,10 @@ var TextAssist = function(textarea, options) {
     _elmTx.selectionStart = fore.length;
     _elmTx.selectionEnd = fore.length;
     hide();
+    
+    if (_op.onSelected) {
+      _op.onSelected(val);
+    }
   }
   
   function _applyStyle(element, style) {
