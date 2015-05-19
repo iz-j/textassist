@@ -33,13 +33,25 @@ var demo2 = new TextAssist(document.getElementById('demo2'), {
   ulClassName: 'dropdown-menu',
   anchorClassName: 'dropdown-item',
   activeClassName: 'active',
-  item: function(value, term) {
+  item: function(source, term) {
     var capitalized = term;
-    if (term) {
+    if (capitalized) {
       capitalized = term.charAt(0).toUpperCase() + term.slice(1);
     }
-    return value.replace(capitalized, '<u>' + capitalized + '</u>');
+    return source.replace(capitalized, '<u>' + capitalized + '</u>');
   },
   loadingHTML: '<img src="images/loading.gif" /><span>Now loading...</span>',
   noneHTML: '<img src="images/not-found.png" /><span>Nothing found.</span>'
+});
+
+$('#demo3').textassist({
+  find: function(term, callback) {
+    callback(filterData(term));
+  },
+  beforeFix: function(source) {
+    return '"' + source + '"';
+  },
+  afterFix: function(value) {
+    console.log('Applied value = ' + value);
+  }
 });

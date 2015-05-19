@@ -11,7 +11,7 @@
   <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
   <link rel="stylesheet" type="text/css" href="stylesheets/index.css" media="screen">
-  <title>Textassist by iz-j</title>
+  <title>TextAssist</title>
 </head>
 
 <body>
@@ -92,16 +92,35 @@ var textassist = new TextAssist(textarea, {
   ulClassName: 'dropdown-menu',
   anchorClassName: 'dropdown-item',
   activeClassName: 'active',
-  item: function(value, term) {
+  item: function(source, term) {
     // You can make your own HTML to show the value.
     var capitalized = term;
-    if (term) {
+    if (capitalized) {
       capitalized = term.charAt(0).toUpperCase() + term.slice(1);
     }
-    return value.replace(capitalized, '&lt;u&gt;' + capitalized + '&lt;/u&gt;');
+    return source.replace(capitalized, '&lt;u&gt;' + capitalized + '&lt;/u&gt;');
   },
   loadingHTML: '&lt;img src="xxx.gif" /&gt;&lt;span&gt;Now loading...&lt;/span&gt;',
   noneHTML: '&lt;img src="yyy.png" /&gt;&lt;span&gt;Nothing found.&lt;/span&gt;'
+});
+  </pre>
+</div>
+
+<h4>jQuery</h4>
+<div class="demo">
+  <textarea id="demo3" rows=5 cols=30 placeholder="Press Ctrl+Space..."></textarea>
+  <pre class="prettyprint">
+// Also, you can use with jQuery!
+$('#demo3').textassist({
+  find: function(term, callback) {
+    callback(filterData(term));
+  },
+  beforeFix: function(source) {
+    return '"' + source + '"';
+  },
+  afterFix: function(value) {
+    console.log('Applied value = ' + value);
+  }
 });
   </pre>
 </div>
@@ -137,9 +156,11 @@ var textassist = new TextAssist(
 var options = {
   // [Required function]
   find: function(term, callback) {
-    // Implements getting data and passing data to callback.
+    // Implement getting data and passing data to callback.
     // 'term' is string for filtering data. 
-    // 'callback' is function to process next. Accepts only array.
+    // 'callback' is function to process next. Accepts only array as the argument.
+    // Example:
+    return ['some', 'data', 'filtered', 'by', 'term'];
   },
   // [Class name for &lt;UL&gt;]
   ulClassName: null,     // If you use Bootstrap, set 'dropdown-menu'.
@@ -150,11 +171,11 @@ var options = {
   // [Class name for &lt;LI&gt; when it is selected]
   activeClassName: null, // If you use Bootstrap, set 'active'.
   // [Optional function]
-  item: function(value, term) {
-    // Implements making content html.
-    // 'value' is string for suggestion.
-    // 'term' is same as `find` function.
-    // Default implementaion is bellow:
+  item: function(source, term) {
+    // Implement making content html.
+    // 'source' is string for suggestion.
+    // 'term' is same value of `find` function.
+    // Default implementaion is:
     return value;
   },
   // [HTML that is shown when preparing values]
@@ -162,7 +183,20 @@ var options = {
   // [HTML that is shown when there are no values]
   noneHTML: '&lt;a href="javasript:void(0)"&gt;No items...&lt;/a&gt;',
   // [Delay time for firing suggestion event]
-  delayMills: 200
+  delayMills: 200,
+  
+  // [Event before fixing the selection]
+  beforeFix: function(source) {
+    // 'source' is the value to be applied to textarea.
+    // You can change 'source' to another value.
+    // Default implementation is:
+    return source;
+  },
+  // [Event after fixing the selection]
+  afterFix: function(value) {
+    // 'value' is the value applied to textarea.
+    // Default is NOOP.
+  }
 };
 </pre>
 
@@ -202,6 +236,7 @@ var options = {
   </div>
 </div>
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=sunburst"></script>
 <script type="text/javascript" src="javascripts/textassist.js"></script>
 <script type="text/javascript" src="javascripts/main.js"></script>
