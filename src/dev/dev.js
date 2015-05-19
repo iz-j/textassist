@@ -33,8 +33,8 @@ var ta2 = new TextAssist(document.getElementById('sample2'), {
   liClassName: 'sample2-li',
   anchorClassName: 'sample2-a',
   activeClassName: 'active',
-  item: function(value, term) {
-    return value.replace(term, '<b>' + term + '</b>');
+  item: function(source, term) {
+    return source.replace(term, '<b>' + term + '</b>');
   },
   loadingHTML: '<span class="label label-info">Now loading...</span>',
   noneHTML: '<div class="alert alert-warning">There are no items.</div>'
@@ -45,7 +45,11 @@ $('#sample3').textassist({
     console.log('term = ' + term);
     callback(filterData(term));
   },
-  onSelected: function(value) {
-    console.log('selected = ' + value);
+  beforeFix: function(source) {
+    console.log('beforeFix: ' + source);
+    return source;
+  },
+  afterFix: function(value) {
+    console.log('afterFix: ' + value);
   }
 });

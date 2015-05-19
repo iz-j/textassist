@@ -19,11 +19,12 @@ var TextAssist = function(textarea, options) {
     liClassName: null,
     anchorClassName: null,
     activeClassName: null,
-    item: function(value, term) { return value; },
+    item: function(source, term) { return source; },
     loadingHTML: '<a href="javasript:void(0)">Loading...</a>',
     noneHTML: '<a href="javasript:void(0)">No items...</a>',
     delayMills: 200,
-    onSelected: function(value) {}
+    beforeFix: function(source) { return source; },
+    afterFix: function(value) {}
   };
   
   Object.keys(_op).forEach(function(name) {
@@ -195,7 +196,7 @@ var TextAssist = function(textarea, options) {
     // Find anchor and fix selection.
     var elm = e.target;
     while (elm && elm !== _elmUl) {
-      if (e.target.tagName === 'A' && elm.dataset.value) {
+      if (e.target.tagName === 'A' && elm.dataset.source) {
         _elmSelected = elm;
         _fixSelected();
         break;
@@ -239,15 +240,15 @@ var TextAssist = function(textarea, options) {
     _term = m ? m[2] : '';
   }
   
-  function _findCallback(values) {
+  function _findCallback(sources) {
     // No data.
-    if (!values || values.length === 0) {
+    if (!sources || sources.length === 0) {
       _elmUl.firstChild.innerHTML = _op.noneHTML;
       return;
     }
     // Show list.
     _elmUl.removeChild(_elmUl.firstChild);
-    values.forEach(function(val) {
+    sources.forEach(function(src) {
       var li = document.createElement('li');
       var a  = document.createElement('a');
       li.appendChild(a);
@@ -259,8 +260,8 @@ var TextAssist = function(textarea, options) {
       } else {
         _applyStyle(a, DEFAULT_ITEM_NORMAL_STYLE);
       }
-      a.dataset.value = val;
-      a.innerHTML = _op.item(val, _term);
+      a.dataset.source = src;
+      a.innerHTML = _op.item(src, _term);
       _elmUl.appendChild(li);
       // Select first item.
       if (!_elmSelected) {
@@ -314,7 +315,9 @@ var TextAssist = function(textarea, options) {
   }
   
   function _fixSelected() {
-    var val = _elmSelected.dataset.value;
+    var src = _elmSelected.dataset.source;
+    
+    var val = _op.beforeFix ? _op.beforeFix(src) : src;
     var fore = _elmTx.value.slice(0, _elmTx.selectionStart);
     var aft  = _elmTx.value.slice(_elmTx.selectionStart, _elmTx.value.length);
     // Replace term to selected value and join parts.
@@ -326,8 +329,8 @@ var TextAssist = function(textarea, options) {
     _elmTx.selectionEnd = fore.length;
     hide();
     
-    if (_op.onSelected) {
-      _op.onSelected(val);
+    if (_op.afterFix) {
+      _op.afterFix(val);
     }
   }
   
